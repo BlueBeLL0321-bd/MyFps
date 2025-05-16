@@ -10,10 +10,10 @@ namespace MySample
         // 참조
         private CharacterController controller;
 
-        // 입력
+        // 입력 - 이동
         private Vector2 inputMove;
 
-        // 이동
+        // 이동 속도
         [SerializeField]
         private float moveSpeed = 10f;
 
