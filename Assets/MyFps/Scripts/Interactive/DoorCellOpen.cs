@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 namespace MyFps
 {
@@ -14,6 +15,9 @@ namespace MyFps
         public GameObject actionUI;
         public TextMeshProUGUI actionText;
 
+        // 크로스헤어
+        public GameObject extraCross;
+
         [SerializeField]
         private string action = "Open The Door";
 
@@ -22,9 +26,21 @@ namespace MyFps
 
         // 애니메이션 파라미터
         private string paramIsOpen = "IsOpen";
+
+        // 신 페이더
+        public SceneFader fader;
+
+        // 로드할 신 이름
+        [SerializeField]
+        private string loadToScene = "PlayScene";
         #endregion
 
         #region Unity Event Method
+
+        private void Start()
+        {
+            
+        }
 
         private void Update()
         {
@@ -34,6 +50,8 @@ namespace MyFps
 
         private void OnMouseOver()
         {
+            extraCross.SetActive(true);
+
             if(theDistance <= 2f)
             {
                 ShowActionUI();
@@ -57,6 +75,8 @@ namespace MyFps
 
         private void OnMouseExit()
         {
+            extraCross.SetActive(false);
+
             HideActionUI();
         }
         #endregion

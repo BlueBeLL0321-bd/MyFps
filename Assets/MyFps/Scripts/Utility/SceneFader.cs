@@ -14,18 +14,32 @@ namespace MyFps
 
         // 애니메이션 커브
         public AnimationCurve curve;
+
+        // 페이드 인 딜레이 타임
+        [SerializeField]
+        private float fadeInDelay = 5f;
         #endregion
 
         private void Start()
         {
+            // 초기화 : 페이드 이미지
+            img.color = new Color(0f, 0f, 0f, 1f);
+
             // 페이드 인
-            StartCoroutine(FadeIn());
+            // StartCoroutine(FadeIn(fadeInDelay));
         }
 
         // 코루틴으로 구현
+        // delayTime : 매개 변수로 딜레이 타임 받아 딜레이 후 페이드 효과
         // Fade In : 1초 동안 : 검정에서 완전 투명으로(이미지 알파 값 a : 1 -> a : 0)
-        IEnumerator FadeIn()
+        IEnumerator FadeIn(float delayTime = 0f)
         {
+            // delayTime 지연
+            if(delayTime > 0)
+            {
+                yield return new WaitForSeconds(delayTime);
+            }
+            
             float t = 1f;
 
             while (t > 0)
@@ -53,6 +67,12 @@ namespace MyFps
             }
         }
 
+        // 페이드 인 외부에서 호출
+        public void FadeStart(float delayTime)
+        {
+            StartCoroutine(FadeIn(delayTime));
+        }
+
         // Fade Out 효과 후 매개 변수로 받은 신 이름으로 LoadScene으로 이동
         IEnumerator FadeOut(string sceneName)
         {
@@ -68,6 +88,7 @@ namespace MyFps
 
                 yield return 0f;
             }
+
 
             // 신 이동
             if(sceneName != "")
