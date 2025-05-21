@@ -39,8 +39,10 @@ namespace MyFps
                 // 키 입력 체크
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    // UI 숨기기
+                    // 
                     extraCross.SetActive(false);
+
+                    // UI 숨기기
                     HideActionUI();
 
                     DoAction();

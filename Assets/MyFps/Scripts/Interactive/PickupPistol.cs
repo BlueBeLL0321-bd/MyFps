@@ -18,6 +18,7 @@ namespace MyFps
             // 무기 획득, 충돌체 제거
             realPistol.SetActive(true);
             theArrow.SetActive(false);
+
             this.gameObject.SetActive(false);   // Fake Pistol 및 충돌체 제거
         }
         #endregion
