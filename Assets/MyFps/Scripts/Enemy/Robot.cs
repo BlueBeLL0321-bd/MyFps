@@ -40,6 +40,15 @@ namespace MyFps
         [SerializeField]
         private float attackRange = 1.5f;
 
+        // 공격력
+        [SerializeField]
+        private float attackDamage = 5f;
+
+        // 공격 타이머
+        [SerializeField]
+        private float attackTime = 2f;
+        private float countdown;
+
         // 애니메이션 파라미터
         private string enemyState = "EnemyState";
         #endregion
@@ -49,6 +58,9 @@ namespace MyFps
         {
             // 참조
             animator = this.GetComponent<Animator>();
+
+            // 초기화
+            currentHealth = maxHealth;
         }
 
         private void OnEnable()
@@ -64,7 +76,7 @@ namespace MyFps
             Vector3 dir = target - this.transform.position;
             float distance = Vector3.Distance(transform.position, target);
 
-            // 사거리 체크
+            // 공격 범위 체크
             if(distance <= attackRange)
             {
                 ChangeState(RobotState.R_Attack);
@@ -82,6 +94,12 @@ namespace MyFps
                     break;
 
                 case RobotState.R_Attack:
+                    
+                    // 공격 범위 체크
+                    if(distance > attackDamage)
+                    {
+                        ChangeState(RobotState.R_Walk);
+                    }
                     break;
 
                 case RobotState.R_Death:
@@ -113,10 +131,11 @@ namespace MyFps
         public void TakeDamage(float damage)
         {
             currentHealth -= damage;
+            Debug.Log($"Robot currentHealth : {currentHealth}");
 
             // 대미지 연출 (Sfx, Vfx)
 
-            if(currentHealth <= 0f && isDeath == false)
+            if (currentHealth <= 0f && isDeath == false)
             {
                 Die();
             }
@@ -130,8 +149,32 @@ namespace MyFps
             // 죽음 체크
             ChangeState(RobotState.R_Death);
 
-            // 보상 처리..
+            // 보상 처리
 
+        }
+
+        // 2초마다 대미지를 5씩 준다
+        private void OnAttackTimer()
+        {
+            countdown += Time.deltaTime;
+            if(countdown >= attackTime)
+            {
+                // 타이머 내용
+                Attack();
+
+                // 타이머 초기화
+                countdown = 0;
+            }
+        }
+
+        public void Attack()
+        {
+            Debug.Log($"플레이어에게 {attackDamage}를 준다");
+            PlayerController playerController = thePlayer.GetComponent<PlayerController>();
+            if (playerController)
+            {
+                playerController.TakeDamage(attackDamage);
+            }
         }
         #endregion
     }
