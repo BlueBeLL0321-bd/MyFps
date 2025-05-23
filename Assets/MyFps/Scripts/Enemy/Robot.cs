@@ -19,18 +19,13 @@ namespace MyFps
         private Animator animator;
         public Transform thePlayer; // 타깃
 
+        private RobotHealth robotHealth;
+
         // 로봇의 현재 상태
         private RobotState robotState;
 
         // 로봇의 이전 상태
         private RobotState beforeState;
-
-        // 체력
-        private float currentHealth;
-        [SerializeField]
-        private float maxHealth = 20;
-
-        private bool isDeath = false;
 
         // 이동
         [SerializeField]
@@ -53,24 +48,36 @@ namespace MyFps
         private string enemyState = "EnemyState";
         #endregion
 
+
+
         #region Unity Event Method
-        private void Start()
+        private void Awake()
         {
             // 참조
             animator = this.GetComponent<Animator>();
-
-            // 초기화
-            currentHealth = maxHealth;
+            robotHealth = this.GetComponent<RobotHealth>();
         }
 
         private void OnEnable()
         {
+            // 이벤트 함수 등록
+            robotHealth.OnDie += OnDie;
+
             // 초기화
             ChangeState(RobotState.R_Idle);
         }
 
+        private void OnDisable()
+        {
+            // 이벤트 함수 해제
+            robotHealth.OnDie -= OnDie;
+        }
+
         private void Update()
         {
+            if(robotHealth.IsDeath)
+                return;
+
             // 이동
             Vector3 target = new Vector3(thePlayer.position.x, this.transform.position.y, thePlayer.position.z);
             Vector3 dir = target - this.transform.position;
@@ -127,32 +134,6 @@ namespace MyFps
             animator.SetInteger(enemyState, (int)robotState);
         }
 
-        // 대미지 입기
-        public void TakeDamage(float damage)
-        {
-            currentHealth -= damage;
-            Debug.Log($"Robot currentHealth : {currentHealth}");
-
-            // 대미지 연출 (Sfx, Vfx)
-
-            if (currentHealth <= 0f && isDeath == false)
-            {
-                Die();
-            }
-        }
-
-        // 죽기
-        private void Die()
-        {
-            isDeath = true;
-
-            // 죽음 체크
-            ChangeState(RobotState.R_Death);
-
-            // 보상 처리
-
-        }
-
         // 2초마다 대미지를 5씩 준다
         private void OnAttackTimer()
         {
@@ -170,11 +151,18 @@ namespace MyFps
         public void Attack()
         {
             Debug.Log($"플레이어에게 {attackDamage}를 준다");
-            PlayerController playerController = thePlayer.GetComponent<PlayerController>();
-            if (playerController)
+            IDamageable damageable = thePlayer.GetComponent<IDamageable>();
+            if(damageable != null)
             {
-                playerController.TakeDamage(attackDamage);
+                damageable.TakeDamage(attackDamage);
             }
+        }
+        
+        // 죽음 시 호출되는 함수
+        private void OnDie()
+        {
+            ChangeState(RobotState.R_Death);
+            this.GetComponent<BoxCollider>().enabled = false;
         }
         #endregion
     }

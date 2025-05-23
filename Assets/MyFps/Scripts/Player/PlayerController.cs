@@ -30,25 +30,6 @@ namespace MyFps
         // 점프 높이
         [SerializeField]
         private float jumpHeight = 5f;
-
-        // 체력
-        private float currentHealth;
-        [SerializeField]
-        private float maxHealth = 20;
-
-        private bool isDeath = false;
-
-        // 대미지 효과
-        public GameObject damageFlash;
-
-        public AudioSource hurt01;
-        public AudioSource hurt02;
-        public AudioSource hurt03;
-
-        // 죽음 처리
-        public SceneFader fader;
-        [SerializeField]
-        private string loadToScene = "GameOver";
         #endregion
 
         #region Unity Event Method
@@ -56,9 +37,6 @@ namespace MyFps
         {
             // 참조
             controller = this.GetComponent<CharacterController>();
-
-            // 초기화
-            currentHealth = maxHealth;
         }
 
         private void Update()
@@ -106,55 +84,6 @@ namespace MyFps
         bool GroundCheck()
         {
             return Physics.CheckSphere(groundCheck.position, checkRange, groundMask);
-        }
-
-        // 플레이어 대미지
-        public void TakeDamage(float damage)
-        {
-            currentHealth -= damage;
-            Debug.Log($"Player currentHealth : {currentHealth}");
-
-            // 대미지 연출 Sfx, Vfx
-            StartCoroutine(DamageEffect());
-
-            if(currentHealth <= 0 && isDeath == false)
-            {
-                Die();
-            }
-        }
-
-        // 화면 전체 빨간색 플래시 효과
-        // 대미지 사운드 3개 중 1개 랜덤 발생
-        IEnumerator DamageEffect()
-        {
-            // Vfx
-            damageFlash.SetActive(true);
-
-            // Sfx
-            int randNum = Random.Range(1, 4);
-            if(randNum == 1)
-            {
-                hurt01.Play();
-            }
-            else if(randNum == 2)
-            {
-                hurt02.Play();
-            }
-            else
-            {
-                hurt03.Play();
-            }
-
-            yield return new WaitForSeconds(1f);
-            damageFlash.SetActive(false);
-        }
-
-        private void Die()
-        {
-            isDeath = true;
-
-            // 죽음 처리
-            fader.FadeTo(loadToScene);
         }
         #endregion
     }
