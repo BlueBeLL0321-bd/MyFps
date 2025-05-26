@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System.Collections;
 
 namespace MyFps
 {
@@ -9,6 +8,7 @@ namespace MyFps
         #region Variables
         // 참조
         private CharacterController controller;
+        public PistolShoot pistolShoot;
 
         // 입력
         private Vector2 inputMove;
@@ -77,6 +77,18 @@ namespace MyFps
             {
                 // 점프 높이만큼 뛰기 위한 속도 구하기
                 velocity.y = Mathf.Sqrt(-2f * gravity * jumpHeight);
+            }
+        }
+
+        public void OnFire(InputAction.CallbackContext context)
+        {
+            // 무장 체크
+            if (PlayerDataManager.Instance.Weapon == WeaponType.None)
+                return;
+
+            if (context.started) // key down, button down
+            { 
+                pistolShoot.Fire();
             }
         }
 

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 using System.Collections;
 
@@ -18,7 +19,17 @@ namespace MyFps
         public TextMeshProUGUI sequenceText;
 
         [SerializeField]
-        private string sequence = "I need to get out of here!";
+        private string sequence01 = "...Where am I?";
+
+        [SerializeField]
+        private string sequence02 = "I need get out of here!";
+
+        // 배경음
+        public AudioSource bgm01;
+
+        // 대사 음성
+        public AudioSource line01;
+        public AudioSource line02;
         #endregion
 
         #region Unity Event Method
@@ -38,20 +49,29 @@ namespace MyFps
         IEnumerator SequencePlay()
         {
             // 0. 플레이어 캐릭터 비활성화
-            thePlayer.SetActive(false);
+            PlayerInput input = thePlayer.GetComponent<PlayerInput>();
+            input.enabled = false;
 
             // 1. 페이드 인 연출 (1초 대기 후 페이드 인 효과)
-            fader.FadeStart(1f);
+            fader.FadeStart(4f);
 
             // 2. 화면 하단에 시나리오 텍스트 화면 출력
-            sequenceText.text = sequence;
+            sequenceText.text = sequence01;
+            line01.Play();
+            yield return new WaitForSeconds(3f);
+
+            sequenceText.text = sequence02;
+            line02.Play();
+            yield return new WaitForSeconds(3f);
 
             // 3. 3초 후에 시나리오 텍스트 없어진다
-            yield return new WaitForSeconds(3f);
             sequenceText.text = "";
 
             // 4. 플레이 캐릭터 활성화
-            thePlayer.SetActive(true);
+            input.enabled = true;
+
+            // 배경음 플레이 시작
+            bgm01.Play();
         }
         #endregion
     }

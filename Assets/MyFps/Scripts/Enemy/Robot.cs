@@ -46,6 +46,10 @@ namespace MyFps
 
         // 애니메이션 파라미터
         private string enemyState = "EnemyState";
+
+        // 배경음 전환
+        public AudioSource jumpScare;
+        public AudioSource bgm01;
         #endregion
 
 
@@ -150,7 +154,6 @@ namespace MyFps
 
         public void Attack()
         {
-            Debug.Log($"플레이어에게 {attackDamage}를 준다");
             IDamageable damageable = thePlayer.GetComponent<IDamageable>();
             if(damageable != null)
             {
@@ -162,6 +165,11 @@ namespace MyFps
         private void OnDie()
         {
             ChangeState(RobotState.R_Death);
+
+            // 배경음 변경
+            jumpScare.Stop();
+            bgm01.Play();
+
             this.GetComponent<BoxCollider>().enabled = false;
         }
         #endregion

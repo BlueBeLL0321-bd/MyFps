@@ -40,7 +40,6 @@ namespace MyFps
         public void TakeDamage(float damage)
         {
             currentHealth -= damage;
-            Debug.Log($"Player currentHealth : {currentHealth}");
 
             // 대미지 연출 Sfx, Vfx
             StartCoroutine(DamageEffect());

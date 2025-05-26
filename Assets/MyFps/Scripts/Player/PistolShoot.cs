@@ -66,12 +66,15 @@ namespace MyFps
         #endregion
 
         #region Custom Method
-        public void OnFire(InputAction.CallbackContext context)
+        public void Fire()
         {
-            if (context.started && isFire == false) // key down, button down
+            // 연사 방지 체크
+            if (isFire)
+                return;
+            if(PlayerDataManager.Instance.UseAmmo(1))
             {
                 StartCoroutine(Shoot());
-            } 
+            }
         }
 
         // 슛
@@ -79,7 +82,6 @@ namespace MyFps
         {
             // 1. 연사 방지 발사 후(1초 동안) 발사가 안 되도록 한다
             isFire = true;
-            Debug.Log($"상대방에게 {attackDamage} 대미지를 준다");
 
             // 레이를 쏴서 200 안에 적(로봇)이 있으면 적(로봇)에게 대미지를 준다
             RaycastHit hit;
@@ -87,20 +89,6 @@ namespace MyFps
 
             if(isHit)
             {
-                Debug.Log($"{hit.transform.name}에게 {attackDamage} 대미지를 준다");
-
-                /*Robot robot = hit.transform.GetComponent<Robot>();
-                if(robot != null)
-                {
-                    robot.TakeDamage(attackDamage);
-                }
-
-                ZombieRobot zombieRobot = hit.transform.GetComponent<ZombieRobot>();
-                if(zombieRobot != null)
-                {
-                    zombieRobot.TakeDamage(attackDamage);
-                }*/
-
                 if(hitImpactPrefab)
                 {
                     GameObject effectGo = Instantiate(hitImpactPrefab, hit.point, Quaternion.LookRotation(hit.normal));

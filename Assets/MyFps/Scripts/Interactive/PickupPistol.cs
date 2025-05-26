@@ -9,6 +9,10 @@ namespace MyFps
         #region Variables
         // 인터렉티브 액션 연출
         public GameObject realPistol;
+        public GameObject ammoUI;
+        public GameObject ammoBox;
+        public GameObject secondTrigger;
+
         public GameObject theArrow;
         #endregion
 
@@ -16,8 +20,15 @@ namespace MyFps
         protected override void DoAction()
         {
             // 무기 획득, 충돌체 제거
-            realPistol.SetActive(true);
             theArrow.SetActive(false);
+
+            realPistol.SetActive(true);
+            ammoUI.SetActive(true);
+            ammoBox.SetActive(true);
+            secondTrigger.SetActive(true);
+
+            // 무기 데이터 저장
+            PlayerDataManager.Instance.Weapon = WeaponType.Pistol;
 
             this.gameObject.SetActive(false);   // Fake Pistol 및 충돌체 제거
         }

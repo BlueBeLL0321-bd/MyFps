@@ -21,6 +21,9 @@ namespace MyFps
 
         // 애니메이션 파라미터
         private string isOpen = "IsOpen";
+
+        // 배경음
+        public AudioSource bgm01;
         #endregion
 
         #region Unity Event Method
@@ -40,6 +43,9 @@ namespace MyFps
         // 트리거 
         IEnumerator SequencePlayer()
         {
+            // 기본 배경음을 중단시킨다
+            bgm01.Stop();
+
             // 문이 열린다
             animator.SetBool(isOpen, true);
 
@@ -52,7 +58,7 @@ namespace MyFps
             // 1초 딜레이
             yield return new WaitForSeconds(1f);
 
-            // 적 등장 사운드 플레이
+            // 적 등장 사운드 (배경음) 플레이
             jumpScare.Play();
 
             // 로봇의 상태가 걷기 상태로 변경

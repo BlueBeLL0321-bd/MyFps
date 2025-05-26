@@ -1,0 +1,25 @@
+using UnityEngine;
+
+namespace MyFps
+{
+    // AmmoBox 아이템 획득 : Ammo 7개 지급
+    public class PickupAmmoBox : Interactive
+    {
+        #region Variables
+        [SerializeField]
+        private int giveAmmo = 7;
+        #endregion
+
+        #region Variables
+        protected override void DoAction()
+        {
+            PlayerDataManager.Instance.AddAmmo(giveAmmo);
+
+            // 이펙트 Vfx, Sfx
+
+            // 아이템 제거 : 트리거 비활성화, 킬
+            this.gameObject.SetActive(false);
+        }
+        #endregion
+    }
+}

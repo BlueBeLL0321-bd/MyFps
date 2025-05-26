@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using TMPro;
+using UnityEngine.InputSystem;
 
 namespace MyFps
 {
@@ -10,14 +11,17 @@ namespace MyFps
         // 플레이어 오브젝트
         public GameObject thePlayer;
 
+        // 화살표
+        public GameObject theArrow;
+
         // 시나리오 대사 처리
         public TextMeshProUGUI sequenceText;
 
         [SerializeField]
-        private string sequence = "Looks like a weapon on that table.";
+        private string sequence = "Looks like there's a weapon on that table.";
 
-        // 화살표
-        public GameObject theArrow;
+        // 대사 음성
+        public AudioSource line03;
         #endregion
 
         #region Unity Event Method
@@ -43,10 +47,12 @@ namespace MyFps
         IEnumerator SequencePlayer()
         {
             // 1. 플레이 캐릭터 비활성화(플레이 멈춤)
-            thePlayer.SetActive(false);
+            PlayerInput input = thePlayer.GetComponent<PlayerInput>();
+            input.enabled = false;
 
-            // 2. 대사 출력
+            // 2. 대사 출력 : "Looks like there's a weapon on that table."
             sequenceText.text = sequence;
+            line03.Play();
 
             // 3. 1초 딜레이
             yield return new WaitForSeconds(1f);
@@ -54,12 +60,12 @@ namespace MyFps
             // 4. 화살표 활성화
             theArrow.SetActive(true);
 
-            // 5. 다시 1초 딜레이
-            yield return new WaitForSeconds(1f);
+            // 5. 2초 딜레이
+            yield return new WaitForSeconds(2f);
             sequenceText.text = "";
 
             // 6. 플레이 캐릭터 활성화(다시 플레이)
-            thePlayer.SetActive(true);
+            input.enabled = true;
         }
         #endregion
     }

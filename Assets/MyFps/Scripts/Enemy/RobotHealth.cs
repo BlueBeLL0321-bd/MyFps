@@ -41,7 +41,6 @@ namespace MyFps
         public void TakeDamage(float damage)
         {
             currentHealth -= damage;
-            Debug.Log($"Robot currentHealth : {currentHealth}");
 
             // 대미지 연출 (Sfx, Vfx)
 
