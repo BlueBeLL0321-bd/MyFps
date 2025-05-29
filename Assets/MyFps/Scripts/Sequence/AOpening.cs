@@ -67,11 +67,11 @@ namespace MyFps
             // 3. 3초 후에 시나리오 텍스트 없어진다
             sequenceText.text = "";
 
-            // 4. 플레이 캐릭터 활성화
-            input.enabled = true;
-
-            // 배경음 플레이 시작
+            // 4. 배경음 플레이 시작
             bgm01.Play();
+
+            // 5. 플레이 캐릭터 활성화
+            input.enabled = true;
         }
         #endregion
     }
