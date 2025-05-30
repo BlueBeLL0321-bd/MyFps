@@ -17,6 +17,10 @@ namespace MyFps
         // 크로스헤어
         public GameObject extraCross;
 
+        // 인터렉티브 기능 사용 여부
+        [SerializeField]
+        protected bool unInteractive = false;
+
         [SerializeField]
         protected string action = "Do Interactive Action";
         #endregion
@@ -29,6 +33,10 @@ namespace MyFps
 
         private void OnMouseOver()
         {
+            // 인터렉티브 기능 끄기
+            if (unInteractive)
+                return;
+
             extraCross.SetActive(true);
 
             if (theDistance <= 2f)

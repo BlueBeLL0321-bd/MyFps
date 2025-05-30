@@ -41,7 +41,7 @@ namespace MyFps
             input.enabled = false;
 
             // 1. 페이드 인 연출 (1초 대기 후 페이드 인 효과)
-            fader.FadeStart(4f);
+            fader.FadeStart(0.5f);
 
             // 2. 화면 하단에 시나리오 텍스트 빈 값 초기화
             sequenceText.text = "";
