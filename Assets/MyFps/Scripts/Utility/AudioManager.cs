@@ -122,6 +122,12 @@ namespace MyFps
 
             sound.source.Play();
         }
+
+        public void StopBgm()
+        {
+            // 배경음 찾기
+            Stop(bgmSound);
+        }
         #endregion
     }
 }

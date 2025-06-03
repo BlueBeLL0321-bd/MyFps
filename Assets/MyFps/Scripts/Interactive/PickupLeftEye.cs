@@ -23,6 +23,10 @@ namespace MyFps
         public TextMeshProUGUI sequenceText;
         [SerializeField]
         private string sequence = "You Have Obtained A Puzzle Item";
+
+        // 숨겨진 벽
+        public GameObject fakeWall;
+        public GameObject hiddenWall;
         #endregion
 
         #region Custom Method
@@ -34,6 +38,14 @@ namespace MyFps
         IEnumerator ShowPuzzleUI()
         {
             PlayerDataManager.Instance.GainPuzzleKey(puzzleKey);
+
+            // 숨겨진 벽 체크
+            if(PlayerDataManager.Instance.HasPuzzleKey(PuzzleKey.LEFTEYE_KEY)
+                && PlayerDataManager.Instance.HasPuzzleKey(PuzzleKey.RIGHTEYE_KEY))
+            {
+                fakeWall.SetActive(false);
+                hiddenWall.SetActive(true);
+            }
 
             // 인터렉티브 기능 제거
             unInteractive = true;
