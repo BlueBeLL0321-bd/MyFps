@@ -8,7 +8,9 @@ namespace MyFps
         R_Idle = 0,
         R_Walk,
         R_Attack,
-        R_Death
+        R_Death,
+        R_Patrol,
+        R_Chase
     }
 
     // 적(로봇)을 제어하는 클래스
@@ -107,7 +109,7 @@ namespace MyFps
                 case RobotState.R_Attack:
                     
                     // 공격 범위 체크
-                    if(distance > attackDamage)
+                    if(distance > attackRange)
                     {
                         ChangeState(RobotState.R_Walk);
                     }
