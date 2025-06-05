@@ -113,6 +113,7 @@ namespace MyFps
                     {
                         ChangeState(RobotState.R_Walk);
                     }
+                    transform.LookAt(target);
                     break;
 
                 case RobotState.R_Death:
