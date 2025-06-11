@@ -43,8 +43,6 @@ namespace MyFps
             {
                 if(OnPickUp())
                 {
-                    Debug.Log("아이템을 먹었습니다");
-
                     // 아이템 오브젝트 킬
                     Destroy(gameObject);
                 }

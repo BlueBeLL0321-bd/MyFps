@@ -93,11 +93,41 @@ namespace MyFps
             }
         }
 
-        
-        // 다른 신으로 이동 시 호출
+        // Fade Out 효과 후 매개 변수로 받은 신 빌드 번호로 LoadScene으로 이동
+        IEnumerator FadeOut(int sceneNumber)
+        {
+            // Fade Out 효과 후
+            float t = 0f;
+
+
+            while (t < 1f)
+            {
+                t += Time.deltaTime;
+                float a = curve.Evaluate(t);
+                img.color = new Color(0f, 0f, 0f, a);
+
+                yield return 0f;
+            }
+
+
+            // 신 이동
+            if (sceneNumber >= 0)
+            {
+                SceneManager.LoadScene(sceneNumber);
+            }
+        }
+
+
+        // 다른 신으로 이동 시 호출 - 신 이름
         public void FadeTo(string sceneName = "")
         {
             StartCoroutine(FadeOut(sceneName));
+        }
+
+        // 다른 신으로 이동 시 호출 - 신 빌드 번호
+        public void FadeTo(int sceneNumber = -1)
+        {
+            StartCoroutine(FadeOut(sceneNumber));
         }
 
     }

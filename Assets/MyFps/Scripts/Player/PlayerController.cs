@@ -88,7 +88,6 @@ namespace MyFps
             // 무장 체크
             if (PlayerDataManager.Instance.Weapon == WeaponType.None)
             {
-                Debug.Log("Weapon Type : None");
                 return;
             }
 

@@ -6863,6 +6863,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseUI: {fileID: 496032452}
   playerInput: {fileID: 1885310004}
+  fader: {fileID: 296772047}
+  loadToScene: MainMenu
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -16388,6 +16390,8 @@ GameObject:
   - component: {fileID: 1182955404}
   - component: {fileID: 1182955403}
   - component: {fileID: 1182955402}
+  - component: {fileID: 1182955406}
+  - component: {fileID: 1182955407}
   m_Layer: 0
   m_Name: Third Person Aim Camera
   m_TagString: Untagged
@@ -16497,6 +16501,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1182955406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182955401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NoiseProfile: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 0
+  FrequencyGain: 0
+  m_NoiseOffsets: {x: 0, y: 0, z: 0}
+--- !u!114 &1182955407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182955401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b11e5272cf448418222cd5dc2d7a40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1195558872
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21187,7 +21220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pistolShoot: {fileID: 1169077223470553189}
-  moveSpeed: 5
+  moveSpeed: 6.5
   velocity: {x: 0, y: 0, z: 0}
   groundCheck: {fileID: 1375253999}
   checkRange: 0.2
@@ -21207,7 +21240,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80ec45e59dcf0d44dbf606c2deaa1af7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 20
   damageFlash: {fileID: 780163854}
   hurt01: {fileID: 661598382}
   hurt02: {fileID: 1574845706}

@@ -8,7 +8,7 @@ namespace MyFps
         #region Variables
         public SceneFader fader;
         [SerializeField]
-        private string loadToScene = "PlayScene";
+        private string loadToScene = "MainMenu";
         #endregion
 
         #region Unity Event Method
@@ -26,12 +26,13 @@ namespace MyFps
         #region Custom Method
         public void Retry()
         {
-            fader.FadeTo(loadToScene);
+            int nowScene = PlayerDataManager.Instance.SceneNumber;
+            fader.FadeTo(nowScene);
         }
 
         public void Menu()
         {
-            Debug.Log("Go To Menu!!!");
+            fader.FadeTo(loadToScene);
         }
         #endregion
     }

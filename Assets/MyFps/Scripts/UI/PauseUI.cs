@@ -9,6 +9,12 @@ namespace MyFps
         #region Variables
         public GameObject pauseUI;
         public PlayerInput playerInput;
+
+        public SceneFader fader;
+        [SerializeField]
+        private string loadToScene = "MainMenu";
+
+        private bool isMenuGoing = false;
         #endregion
 
         #region Custom Method
@@ -24,6 +30,9 @@ namespace MyFps
         // Esc키 누르면 UI 활성화, 다시 Esc키 누르면 UI 비활성화 - 토글 키
         public void Toggle()
         {
+            if (isMenuGoing)
+                return;
+
             pauseUI.SetActive(!pauseUI.activeSelf);
 
             if(pauseUI.activeSelf) // 창이 열린 상태
@@ -48,7 +57,13 @@ namespace MyFps
         // 메뉴 가기 버튼 호출
         public void Menu()
         {
-            Debug.Log("Go To Menu!!!");
+            if (isMenuGoing)
+                return;
+
+            isMenuGoing = true;
+
+            Time.timeScale = 1f;
+            fader.FadeTo(loadToScene);
         }
         #endregion
     }

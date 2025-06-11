@@ -70,7 +70,6 @@ namespace MyFps
             // 찾았는지 체크
             if(sound == null)
             {
-                Debug.Log("Cannot Find " + name + " Sound");
                 return;
             }
 
@@ -95,7 +94,6 @@ namespace MyFps
             // 찾았는지 체크
             if (sound == null)
             {
-                Debug.Log("Cannot Find " + name + " Sound");
                 return;
             }
 
@@ -132,7 +130,6 @@ namespace MyFps
             // 찾았는지 체크
             if (sound == null)
             {
-                Debug.Log("Cannot Find " + name + " Sound");
                 return;
             }
 
