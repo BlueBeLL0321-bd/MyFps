@@ -31,7 +31,7 @@ namespace Unity.FPS.Gameplay
         // 플레이어가 게임 중에 들고 다니는 무기
         private WeaponController[] weaponSlots = new WeaponController[9];
 
-        // 무기 위치 정보
+        // 무기 최종 위치 정보
         private Vector3 weaponMainLocalPosition;
 
         // 무기 교체
@@ -50,12 +50,18 @@ namespace Unity.FPS.Gameplay
 
         // 무기 교체 연출
         private float weaponSwitchTimeStarted = 0f;         // 연출 시작 시간
-        private float weaponSwitchDelay = 1f;               // 
+        private float weaponSwitchDelay = 1f;               // 연출 플레이 시간
+
+        // 적 포착
+        public Camera weaponCamera;
         #endregion
 
         #region Property
         // 무기 리스트(weaponSlots)를 관리하는 인덱스 - 현재 액티브한 무기의 인덱스
         public int ActiveWeaponIndex { get; private set; }
+
+        // 적 포착 체크
+        public bool IsPointingAtEnemy { get; private set; }
         #endregion
 
         #region Unity Event Method
@@ -83,7 +89,34 @@ namespace Unity.FPS.Gameplay
 
         private void Update()
         {
-            
+            // 현재 액티브 무기 가져오기
+            WeaponController activeWeapon = GetActiveWeapon();
+
+            // 키 인풋을 받아 무기 교체
+            if(weaponSwitchState == WeaponSwitchState.Up || weaponSwitchState == WeaponSwitchState.Down)
+            {
+                int switchWeaponInput = inputHandler.GetSwitchWeaponInput();
+                if(switchWeaponInput != 0)
+                {
+                    bool switchUp = switchWeaponInput > 0f;
+                    // 무기 교체
+                    SwitchWeapon(switchUp);
+                }
+            }
+
+            // 적 포착
+            IsPointingAtEnemy = false;
+            if(activeWeapon)
+            {
+                if(Physics.Raycast(weaponCamera.transform.position, weaponCamera.transform.forward, out RaycastHit hit, 1000))
+                {
+                    // 충돌체 중에서 적을 판정
+                    if(hit.collider.GetComponentInParent<Health>() != null)
+                    {
+                        IsPointingAtEnemy = true;
+                    }
+                }
+            }
         }
 
         private void LateUpdate()
@@ -91,7 +124,7 @@ namespace Unity.FPS.Gameplay
             // 무기 교체 연출
             UpdateWeaponState();
 
-            // 무기의 최종 위치
+            // 무기의 최종 위치 적용
             weaponParentSocket.localPosition = weaponMainLocalPosition;
         }
         #endregion
@@ -108,7 +141,7 @@ namespace Unity.FPS.Gameplay
             }
             else
             {
-                switchingTimeFactor = (Time.time - weaponSwitchTimeStarted) / weaponSwitchDelay;
+                switchingTimeFactor = Mathf.Clamp01((Time.time - weaponSwitchTimeStarted) / weaponSwitchDelay);
             }
 
             // 타이머가 완료되었을 때 연출 완료하고 상태 변경
@@ -134,7 +167,7 @@ namespace Unity.FPS.Gameplay
                     OnSwitchToWeapon?.Invoke(newWeapon);
 
                     switchingTimeFactor = 0f;
-                    if(newWeapon != null)
+                    if(newWeapon != null)   // 새로운 무기가 있으면 연출 시작
                     {
                         weaponSwitchTimeStarted = Time.time;
                         weaponSwitchState = WeaponSwitchState.PutUpNew;
@@ -147,10 +180,10 @@ namespace Unity.FPS.Gameplay
                 // 아래 위치에서 디폴트 위치로 이동 완료한 상태
                 else if (weaponSwitchState == WeaponSwitchState.PutUpNew)
                 {
-
+                    weaponSwitchState = WeaponSwitchState.Up;
                 }
             }
-            else // 0 ~ 1 연출 중
+            else // 0 ~ 1 무기의 위치 이동 연출 중
             {
                 if(weaponSwitchState == WeaponSwitchState.PutDownPrevious)
                 {
@@ -165,7 +198,7 @@ namespace Unity.FPS.Gameplay
             }
         }
 
-        // 매개 변수로 받은 무기를 무기 리스트에 추가
+        // 매개 변수로 받은 무기(WeaponController Prefab)를 무기 리스트에 추가
         private bool AddWeapon(WeaponController weaponPrefab)
         {
             // 새로 추가하는 무기 소지 여부 : 중복 검사
@@ -239,7 +272,7 @@ namespace Unity.FPS.Gameplay
                 if(i != ActiveWeaponIndex && GetWeaponAtSlotIndex(i) != null)
                 {
                     int distanceToActiveIndex = GetDistanceBetweenWeaponSlots(ActiveWeaponIndex, i, ascendingOrder);
-                    if (distanceToActiveIndex < closestSlotDistance)
+                    if(distanceToActiveIndex < closestSlotDistance)
                     {
                         closestSlotDistance = distanceToActiveIndex;
                         newWeaponIndex = i;
@@ -254,13 +287,14 @@ namespace Unity.FPS.Gameplay
         // 매개 변수로 받은 무기로 교체
         private void SwitchToWeaponIndex(int newWeaponIndex)
         {
-            if(ActiveWeaponIndex == ActiveWeaponIndex)
+            if(newWeaponIndex == ActiveWeaponIndex)
                 return;
 
             if(newWeaponIndex < 0 || newWeaponIndex >= weaponSlots.Length)
                 return;
 
             weaponSwitchNewWeaponIndex = newWeaponIndex;
+            // 연출 시작 시간 저장
             weaponSwitchTimeStarted = Time.time;
 
             if(GetActiveWeapon() == null)
@@ -269,6 +303,7 @@ namespace Unity.FPS.Gameplay
                 weaponMainLocalPosition = downWeaponPosition.localPosition;
                 // 올리는 상태로 변경
                 weaponSwitchState = WeaponSwitchState.PutUpNew;
+
                 // 새로운 무기 인덱스를 액티브 인덱스로 저장
                 ActiveWeaponIndex = newWeaponIndex;
 
@@ -306,12 +341,17 @@ namespace Unity.FPS.Gameplay
             return distance;
         }
 
-        // 매개 변수로 받은 무기로 교체
+        // 매개 변수로 받은 무기로 교체 무기 활성화
         private void OnWeaponSwitched(WeaponController newWeapon)
         {
             if(newWeapon != null)
             {
+                Debug.Log("무기 활성화됨 : " + newWeapon.name);
                 newWeapon.ShowWeapon(true);
+            }
+            else
+            {
+                Debug.LogWarning("무기 스위칭 시 newWeapon이 null입니다");
             }
         }
         #endregion
