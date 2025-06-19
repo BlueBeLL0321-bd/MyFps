@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using Unity.Cinemachine;
 
 namespace Unity.FPS.Game
 {
@@ -26,6 +27,11 @@ namespace Unity.FPS.Game
         // 크로스헤어
         public CrosshairData defaultCrosshair;          // 기존 크로스헤어
         public CrosshairData targetInSightCrosshair;    // 적이 타기팅 되었을 때의 크로스헤어
+
+        // 조준 Aim
+        [Range(0, 1)]
+        public float aimZoomRatio = 1f;                 // 조준 시 줌 확대 배율
+        public Vector3 aimOffset;                       // 조준 위치로 이동 시 무기별 위치 offset(조정)값
         #endregion
 
         #region Property

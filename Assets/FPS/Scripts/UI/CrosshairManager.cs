@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.FPS.Game;
 using Unity.FPS.Gameplay;
-using UnityEngine.InputSystem.XR.Haptics;
 
 namespace Unity.FPS.UI
 {
@@ -104,7 +103,6 @@ namespace Unity.FPS.UI
                 }
 
                 UpdateCrosshairPointingAtEnemy(true);
-                    
             }
         }
 
